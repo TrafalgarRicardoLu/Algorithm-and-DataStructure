@@ -95,7 +95,7 @@ inline void LinkList<T>::deleteNode(T data)
 		delete(NodeToDelete);
 		return;
 	}
-	while (NodeToDelete->next != NULL&&NodeToDelete->next->next->data != data) {
+	while (NodeToDelete->next != NULL&&NodeToDelete->next->data != data) {
 		NodeToDelete = NodeToDelete->next;
 	}
 	if (NodeToDelete->next == NULL)return;
@@ -122,7 +122,7 @@ inline void LinkList<T>::insert(T data, Node<T>* node)
 	tempNode->data = data;
 	tempNode->next = node->next;
 	node->next = tempNode;
-	if (tempNode->next = NULL)
+	if (tempNode->next == NULL)
 		lastNode = tempNode;
 	this->length++;
 }
@@ -132,7 +132,7 @@ inline void LinkList<T>::insertHead(T data)
 {
 	tempNode = new Node<T>();
 	tempNode->data = data;
-	tempNode->next = haedNode;
+	tempNode->next = headNode;
 	headNode = tempNode;
 	this->length++;
 }
