@@ -5,40 +5,50 @@
 #include <cstring>
 #include "String.h"
 #include <iostream>
+
 using namespace std;
-char * String::append(char *chars) {
-    char *temp = content;
 
-    while (*temp)
-        temp++;
-    while ((*temp++ = *chars++) != '\0')
-        ;
-
-    return content;
+char *String::append( const char* chars) {
+    char * cp = content;
+    while( *cp )
+        cp++;                       /* find end of dst */
+    while( *cp++ = *chars++ ) ;       /* Copy src to end of dst */
+    return( content );                /* Copy src over dst */
 }
 
 String::String() {
+    StringLength = 0;
+    content = new char[1];
+    *content = '\0';;
+}
 
+String::String(const char *string1) {
+    if (!string1)
+    {
+        StringLength = 0;
+        content = new char[1];
+        *content = '\0';
+    }
+    else
+    {
+        StringLength = strlen(string1);
+        content = new char[StringLength + 1];
+        strcpy(content, string1);
+    }
 }
 
 bool String::idEmpty() {
-    return StringLength==0;
+    return StringLength == 0;
 }
 
 size_t String::length() {
-    size_t Length=0;
-    char* temp=content;
-    while(*temp){
-        Length++;
-        temp++;
-    }
-    return Length;
+    return StringLength;
 }
 
 char String::charAt(int index) {
-    char* temp=content;
-    int count=0;
-    while(*temp && count!=index){
+    char *temp = content;
+    int count = 0;
+    while (*temp && count != index) {
         temp++;
         count++;
     }
@@ -46,24 +56,49 @@ char String::charAt(int index) {
 }
 
 int String::indexOf(char *pattern) {
-    int length = strlen(pattern),j=0;
-    int* next = new int[length];
-    int t=next[0] = -1;
-    while (j < length -1) {
+    int length = strlen(pattern), j = 0;
+    int *next = new int[length];
+    int t = next[0] = -1;
+    while (j < length - 1) {
         if (t < 0 || pattern[j] == pattern[t]) {
-            j++; t++;
+            j++;
+            t++;
             pattern[j] != pattern[t] ? t : pattern[t];
-        }
-        else {
+        } else {
             t = next[t];
         }
     }
-    int length_t = this->length(),target=0,p=0;
+    int length_t = this->length(), target = 0, p = 0;
     while (target < length_t && p < length) {
         if (pattern[p] == this->charAt(target) || p < 0) {
-            p++; target++;
+            p++;
+            target++;
+        } else {
+            p = next[p];
         }
-        else {
+    }
+    return target - p;
+}
+
+int String::indexOf(const char *pattern) {
+    int length = strlen(pattern), j = 0;
+    int *next = new int[length];
+    int t = next[0] = -1;
+    while (j < length - 1) {
+        if (t < 0 || pattern[j] == pattern[t]) {
+            j++;
+            t++;
+            pattern[j] != pattern[t] ? t : pattern[t];
+        } else {
+            t = next[t];
+        }
+    }
+    int length_t = this->length(), target = 0, p = 0;
+    while (target < length_t && p < length) {
+        if (pattern[p] == this->charAt(target) || p < 0) {
+            p++;
+            target++;
+        } else {
             p = next[p];
         }
     }
@@ -71,68 +106,72 @@ int String::indexOf(char *pattern) {
 }
 
 bool String::contain(char *pattern) {
-    return indexOf(pattern)>=0;
+    return indexOf(pattern) >= 0;
 }
 
 char *String::subString(int pos, int endPos) {
-    char* temp = content;
-    int count=0;
-    while(*(temp)&& count!=pos) {
+    char *temp = content;
+    int count = 0;
+    while (*(temp) && count != pos) {
         count++;
         temp++;
     }
-    char* ans;
-    char* ansTemp=ans;
-    while ((*ans++ = *temp++) && count!=endPos)
+    char *ans = new char[StringLength+1];
+    char *ansTemp = ans;
+    while (count != endPos && count!=endPos) {
+        *ans++=*temp++;
         count++;
-    return  ansTemp;
+    }
+    return ansTemp;
 }
 
 int String::compare(char *comparison) {
-    char* temp =content;
-    int length_c =strlen(comparison);
-    int length=this->length();
-    while (*(temp)==*(comparison)){
+    char *temp = content;
+    int length_c = strlen(comparison);
+    int length = this->length();
+    while (*(temp) == *(comparison) && length != 0) {
         temp++;
         comparison++;
+        length--;
     }
-    if(temp== nullptr && comparison!= nullptr){
+    if (*(temp) == *(comparison)) {
+        return 0;
+    } else if (*(temp) < *(comparison)) {
+        return 1;
+    } else {
         return -1;
     }
-    if(temp== nullptr && comparison== nullptr){
-        return 0;
-    }
-    if(temp!= nullptr && comparison== nullptr){
-        return 1;
-    }
-    if(*(temp)>*(comparison)){
-        return 1;
-    }
-    return -1;
 }
 
-char* String::replace(char *target, char *replacement) {
+char *String::replace(const char *target,const char *replacement) {
     int pos = this->indexOf(target);
-    char* ans = subString(0,pos);
-    char* last = subString(pos+strlen(target),this->length());
-    ans=strcat(ans,replacement);
-    ans=strcat(ans,last);
-    return ans;
+    char *ans = subString(0, pos);
+    char *last = subString(pos + strlen(target), this->length()+1);
+    ans = strcat(ans, replacement);
+    ans = strcat(ans, last);
+    content=ans;
+    StringLength += strlen(replacement) - strlen(target);
+    return content;
 }
 
-char * String::replaceAll(char *target, char *replacement) {
-    int num;
-    char * ans;
-    while ((num=indexOf(target))!=-1){
-        ans=replace(target,replacement);
+char *String::replaceAll(char *target, char *replacement) {
+    char* temp = content;
+    int count=0;
+    while (this->indexOf(target) != StringLength) {
+        temp = this->replace(target, replacement);
+        count++;
+        if(count>5){
+            return temp;
+        }
     }
-    return ans;
+    return temp;
 }
 
 void String::show() {
-    char* temp = content;
-    while (*(temp)){
-        cout<<*(temp);
+    char *temp = content;
+    while (*(temp)) {
+        cout << *(temp);
         temp++;
     }
 }
+

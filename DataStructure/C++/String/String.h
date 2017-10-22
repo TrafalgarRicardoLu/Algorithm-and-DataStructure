@@ -9,20 +9,26 @@
 class String {
 public:
     String();
-    char * append(char* chars);
+
+    String(const char *content);
+
+    char * append(const char* chars);
     bool idEmpty();
     size_t length();
     char charAt(int index);
     int indexOf(char* pattern);
+    int indexOf(const char *pattern);
     bool contain(char* pattern);
     char* subString(int pos,int endPos);
     int compare(char* comparison);
-    char * replace(char* target, char* replacement);
+    char *replace(const char *target, const char *replacement);
     char * replaceAll(char* target, char* replacement);
     void show();
 private:
     char* content;
     size_t StringLength;
+
+
 };
 
 
