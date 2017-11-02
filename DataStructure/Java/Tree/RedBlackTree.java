@@ -171,22 +171,22 @@ public class RedBlackTree<Key extends Comparable<Key>, Value> {
         Queue<Node> s = new LinkedList<>();
         s.add(node);
         Node curNode;
-        Node nlast = null;
+        Node nextLast = null;
         Node last = node;
         while (!s.isEmpty()) {
             curNode = s.poll();
             System.out.print(curNode.key + " ");
             if (curNode.left != null) {
-                nlast = curNode.left;
+                nextLast = curNode.left;
                 s.add(curNode.left);
             }
             if (curNode.right != null) {
-                nlast = curNode.right;
+                nextLast = curNode.right;
                 s.add(curNode.right);
             }
             if (curNode == last) {
                 System.out.println();
-                last = nlast;
+                last = nextLast;
             }
         }
     }

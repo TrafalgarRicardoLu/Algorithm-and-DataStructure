@@ -1,3 +1,5 @@
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class binaryTree<Key extends Comparable<Key>, Value> {
     private Node root;
@@ -116,5 +118,73 @@ public class binaryTree<Key extends Comparable<Key>, Value> {
         x.N = size(x.left) + size(x.right) + 1;
         return x;
     }
+
+    public void preOrderTraversal() {
+        preOrderTraversal(root);
+    }
+
+    private void preOrderTraversal(Node x) {
+        if (x != null) {
+            System.out.print(x.value);
+            preOrderTraversal(x.left);
+            preOrderTraversal(x.right);
+        }
+    }
+
+    public void inOrderTraversal() {
+        inOrderTraversal(root);
+    }
+
+
+    private void inOrderTraversal(Node x) {
+        if (x != null) {
+            inOrderTraversal(x.left);
+            System.out.print(x.value);
+            inOrderTraversal(x.right);
+        }
+    }
+
+    public void postOrderTraversal(){
+        postOrderTraversal(root);
+    }
+
+    private void postOrderTraversal(Node x){
+        if(x!=null){
+            postOrderTraversal(x.left);
+            postOrderTraversal(x.right);
+            System.out.print(x.value);
+        }
+    }
+
+
+    public void layerTraversal() {
+        layerTraversal(root);
+    }
+
+
+    private void layerTraversal(Node node) {
+        Queue<Node> s = new LinkedList<>();
+        s.add(node);
+        Node curNode;
+        Node nextLast = null;
+        Node last = node;
+        while (!s.isEmpty()) {
+            curNode = s.poll();
+            System.out.print(curNode.key + " ");
+            if (curNode.left != null) {
+                nextLast = curNode.left;
+                s.add(curNode.left);
+            }
+            if (curNode.right != null) {
+                nextLast = curNode.right;
+                s.add(curNode.right);
+            }
+            if (curNode == last) {
+                System.out.println();
+                last = nextLast;
+            }
+        }
+    }
+
 
 }
