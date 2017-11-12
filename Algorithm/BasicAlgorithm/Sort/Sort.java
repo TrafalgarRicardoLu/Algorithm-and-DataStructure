@@ -10,7 +10,7 @@ public class Sort {
         arr[b] = temp;
     }
     private static void sink(Comparable[] arr,int k,int N){
-        while (2*k <= N-1){
+        while (2*k <= N){
             int j = 2*k;
             if(j<N && less(arr[j],arr[j+1])) j++;
             if(!less(arr[k],arr[j])) break;
@@ -125,12 +125,11 @@ public class Sort {
     //heapSort
     public static void heapSort(Comparable[] arr){
         int N=arr.length-1;
-        for(int k=N/2;k>=1;k--)
+        for(int k=N/2;k>=0;k--)
             sink(arr,k,N);
-
-        while (N>1){
-            swap(arr,1,N--);
-            sink(arr,1,N);
+        while (N>=0){
+            swap(arr,0,N--);
+            sink(arr,0,N);
         }
     }
 }
